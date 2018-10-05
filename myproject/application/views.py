@@ -125,13 +125,14 @@ def print_cube(num):
 def print_square(num): 
     print("Square: {}".format(num * num)) 
   
-def main(request):  
+def main():  
     t1 = threading.Thread(target=print_square, args=(10,)) 
     t2 = threading.Thread(target=print_cube, args=(10,)) 
-  
-    t1.start() 
+
+    t1.start()
+
     t2.start() 
 
-    t1.join()
-    t2.join() 
+    # t1.join()
+    # t2.join() 
     return JsonResponse({'message': 'main_run'}) 

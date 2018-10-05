@@ -19,6 +19,8 @@ import threading
 
 # import IPython; IPython.embed();
 
+count=0
+
 logging.basicConfig(filename='test.log',level=logging.DEBUG, format='%(asctime)s:%(levelname)s:%(message)s')
 
 class HomeTests(TestCase):
@@ -311,20 +313,62 @@ class peopleModelTest(TestCase):
 
 
 
-def mock_start():
-	print('inside')	
-	import IPython; IPython.embed()
+# def mock_start():
+# 	print('inside')	
+# 	# import IPython; IPython.embed()
 
-	return 'abc'
-
-
-class MockThread(TestCase):
-
-	@patch.object(threading.Thread, 'start',side_effect=mock_start)
-	def test_mock_start(self, start):
-		t1 = threading.Thread(target=views.print_square(10), args=(10,))
-		t1.start()
-		t1.join()
-		# self.assertEqual(t1.start(), 'abc')
+# 	return 'abc'
 
 
+# class MockThread(TestCase):
+
+# 	@patch.object(threading.Thread, 'start',side_effect=mock_start)
+# 	def test_mock_start(self, start):
+# 		t1 = threading.Thread(target=views.print_square(10), args=(10,))
+# 		t1.start()
+# 		t1.join()
+# 		# self.assertEqual(t1.start(), 'abc')
+
+
+
+class MockThread():
+    def __init__(self, group=None, target=None, name=None, args=(), kwargs=None, *, daemon=None):
+        if kwargs is None:
+            kwargs = {}
+        self._target = target
+        self._name = str(name)
+        self._args = args
+        self._kwargs = kwargs
+
+    def start(self):
+        self._target(*self._args, **self._kwargs)
+        # import IPython; IPython.embed();
+
+
+# def mock_threads():
+# 	global count
+# 	count += 1
+# 	if count<2:
+# 		print('inside')
+# 		# import IPython; IPython.embed();
+# 		t1 = threading.Thread(target=views.print_square, args=(10))
+# 		# print(t1)
+# 		t1.run()
+# 	return 'abc'
+
+
+@patch.object(threading, 'Thread', side_effect=MockThread)
+class MockThreadedFunctions(TestCase):
+
+	def test_mock_main(self, m):
+		# t1 = threading.Thread(target=views.print_square, args=(10))
+		# x = t1.start()
+		response = views.main()
+
+
+
+
+
+# class MockFullThread(TestCase):
+
+# 	@patch.object(threading.Thread, 'start', )
